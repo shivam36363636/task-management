@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const taskRoutes = require("./routes/taskRoutes");
+const authMiddleware = require("./utils/authMiddleware");
+
 dotenv.config();
 const app = express();
 
@@ -20,7 +23,8 @@ mongoose
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/profile", profileRoutes);
+app.use("/api/profile", authMiddleware.verifyAccessToken, profileRoutes);
+app.use("/api/task", authMiddleware.verifyAccessToken, taskRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
