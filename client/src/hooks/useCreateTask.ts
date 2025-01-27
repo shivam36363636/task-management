@@ -9,7 +9,8 @@ type Task = {
   tag: string;
   priority: string;
     team: string;
-    userId: string;
+  userId: string;
+    dueDate: string
 };
 
 export const useCreateTask = (options?: MutateOptions<Task, unknown, Task, unknown>) => {

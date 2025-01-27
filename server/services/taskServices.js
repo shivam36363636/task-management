@@ -1,6 +1,6 @@
 const Task = require("../models/taskModel");
 
-exports.createTask = async ({ title, description,status, userId, assignedTo, tag, priority, team }) => {
+exports.createTask = async ({ title, description,status, userId, assignedTo, tag, priority, team, dueDate }) => {
   const task = await Task.create({
     title,
     description,
@@ -9,7 +9,8 @@ exports.createTask = async ({ title, description,status, userId, assignedTo, tag
     assignedTo,
     tag,
     priority,
-    team
+    team,
+    dueDate
   });
   return task;
 };

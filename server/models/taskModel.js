@@ -15,7 +15,8 @@ const taskSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
   tag: { type: String, required: true, enum: ["bug", "feature", "task"] },
   priority: { type: String, required: true, enum: ["low", "medium", "high"] },
-  team: { type: String, required: true, enum: ["development", "design", "marketing", "sales", "support", "finance", "legal", "hr", "product", "engineering", "customer_success", "other"] }
+  team: { type: String, required: true, enum: ["development", "design", "marketing", "sales", "support", "finance", "legal", "hr", "product", "engineering", "customer_success", "other"] },
+  dueDate: { type: Date, required: true }
 });
 
 module.exports = mongoose.model("Task", taskSchema);

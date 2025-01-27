@@ -14,6 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useGetTaskById } from "@/hooks/useGetTaskById";
 import { X } from "lucide-react";
+import DateField from "../fields/date-field";
 
 export default function CreateTask() {
     const { setIsCreateTaskOpen } = useStore()
@@ -24,7 +25,8 @@ export default function CreateTask() {
         assignedTo: [] as string[],
         tag: "",
         priority: "",
-        team: ""
+      team: "",
+        dueDate: ""
     });
 
     const { data: users, isLoading: usersLoading } = useGetAllUsers();
@@ -46,7 +48,8 @@ export default function CreateTask() {
                 assignedTo: taskData?.data?.data?.assignedTo || [],
                 tag: taskData?.data?.data?.tag || "",
                 priority: taskData?.data?.data?.priority || "",
-                team: taskData?.data?.data?.team || ""
+                team: taskData?.data?.data?.team || "",
+                dueDate: taskData?.data?.data?.dueDate || ""
             })
         }
 
@@ -58,7 +61,8 @@ export default function CreateTask() {
                 assignedTo: [],
                 tag: "",
                 priority: "",
-                team: ""
+                team: "",
+                dueDate: ""
             })
         }
     }, [taskData]);
@@ -83,7 +87,8 @@ export default function CreateTask() {
                     assignedTo: [],
                     tag: "",
                     priority: "",
-                    team: ""
+                    team: "",
+                    dueDate: ""
                 });
                 setIsCreateTaskOpen(false);
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
@@ -188,6 +193,11 @@ export default function CreateTask() {
             onChange={(value) =>
               setFormData({ ...formData, team: value as string })
             }
+          />
+          <DateField
+            label="Due Date"
+            value={formData.dueDate}
+            onChange={(value) => setFormData({ ...formData, dueDate: value })}
           />
           <button
             className="bg-blue-500 text-white p-2 rounded-md"

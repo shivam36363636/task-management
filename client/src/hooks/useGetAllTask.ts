@@ -15,6 +15,7 @@ export type GetAllTaskResponse = {
   team: string;
   createdAt: string;
   updatedAt: string;
+  dueDate: string;
 };
 
 export const useGetAllTask = () => {

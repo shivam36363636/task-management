@@ -31,13 +31,13 @@ export default function MultiSelectField({label, options, value, onChange}: Mult
     }, [isOpen]);
 
     return (
-      <div ref={elementRef} className="flex flex-col gap-2">
-        <label className="text-sm font-medium" htmlFor={label}>
+      <div ref={elementRef} className="flex flex-col gap-2 relative">
+        <label className="text-[12px] font-medium text-gray-700" htmlFor={label}>
           {label} ({value.length} selected)
         </label>
         <div
           onClick={() => setIsOpen(true)}
-          className="flex flex-wrap gap-2 mb-2 border border-gray-300 rounded-md p-2"
+          className="flex flex-wrap gap-2 mb-2 border border-gray-200 outline-none shadow-sm text-sm rounded-xl px-4 py-1.5 text-gray-900 placeholder-gray-500"
         >
           {value?.map((selectedValue) => {
             const option = options.find((opt) => opt.value === selectedValue);
@@ -66,15 +66,15 @@ export default function MultiSelectField({label, options, value, onChange}: Mult
           )}
         </div>
         {isOpen && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 absolute top-full left-0 w-full bg-white z-10 border border-gray-200 rounded-xl">
             <input
               type="text"
-              className="border border-gray-300 rounded-md p-2"
+              className=" outline-none  text-sm px-4 py-1.5 text-gray-900 placeholder-gray-500"
               placeholder="Search options..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <div className="max-h-48 overflow-y-auto border border-gray-300 rounded-md">
+            <div className="max-h-48 overflow-y-auto ">
               {filteredOptions.map((option) => (
                 <div
                   key={option.value}
