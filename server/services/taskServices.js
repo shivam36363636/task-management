@@ -1,10 +1,15 @@
 const Task = require("../models/taskModel");
 
-exports.createTask = async ({ title, description, user }) => {
+exports.createTask = async ({ title, description,status, userId, assignedTo, tag, priority, team }) => {
   const task = await Task.create({
     title,
     description,
-    createdBy: user?.id,
+    status,
+    createdBy: userId,
+    assignedTo,
+    tag,
+    priority,
+    team
   });
   return task;
 };
@@ -29,8 +34,7 @@ exports.getTasksByUser = async (userId) => {
 };
 
 exports.getAllTasks = async () => {
-  const tasks = await Task.find();
-  return tasks;
+  return await Task.find({});
 };
 
 exports.assignTask = async (taskId, userIds) => {

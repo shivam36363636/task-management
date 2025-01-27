@@ -14,12 +14,12 @@ const generateTokens = (user) => {
   return { accessToken, refreshToken };
 };
 
-exports.register = async ({ email, password }) => {
+exports.register = async ({ email, password, name }) => {
   const existingUser = await User.findOne({ email });
   if (existingUser) throw new Error("User already exists");
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ email, password: hashedPassword });
+  const user = await User.create({ email, password: hashedPassword, name });
   return user;
 };
 
@@ -30,7 +30,7 @@ exports.login = async ({ email, password }) => {
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) throw new Error("Invalid email or password");
 
-  return generateTokens(user);
+  return { ...generateTokens(user), user: { email: user.email, userId: user._id, name: user.name } };
 };
 
 exports.refresh = async (refreshToken) => {
@@ -44,3 +44,9 @@ exports.refresh = async (refreshToken) => {
     throw new Error("Invalid refresh token");
   }
 };
+
+exports.getAllUsers = async () => {
+  const users = await User.find();
+  return users?.map((user) => ({ name: user.name, userId: user._id }));
+};
+

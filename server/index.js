@@ -5,12 +5,14 @@ const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const authMiddleware = require("./utils/authMiddleware");
+const cors = require("cors");
 
 dotenv.config();
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Database connection
 mongoose

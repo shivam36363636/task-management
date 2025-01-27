@@ -1,13 +1,42 @@
-"use client"
-import Link from 'next/link';
-import React from 'react'
-import { toast } from 'react-hot-toast';    
-
+"use client";
+import Link from "next/link";
+import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 function RegistrationForm() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
+  });
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success("Registration successful");
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    if (response.ok) {
+      toast.success("Registration successful");
+      router.push("/auth/login");
+    } else {
+      toast.error("Registration failed");
+    }
   };
   return (
     <div>
@@ -17,24 +46,26 @@ function RegistrationForm() {
             Create an Account
           </h2>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+              <div className="mb-4">    
               <label
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Full Name
+                Name
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Shivam Mudgil"
+                placeholder="Shivam"
                 required
-              />
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />    
             </div>
             <div className="mb-4">
-              <label
+              <label  
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
@@ -47,6 +78,10 @@ function RegistrationForm() {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 placeholder="shivam@gmail.com"
                 required
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
               />
             </div>
 
@@ -64,6 +99,10 @@ function RegistrationForm() {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 placeholder="••••••••"
                 required
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
               />
             </div>
 
@@ -81,6 +120,10 @@ function RegistrationForm() {
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 placeholder="••••••••"
                 required
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData({ ...formData, confirmPassword: e.target.value })
+                }
               />
             </div>
 
