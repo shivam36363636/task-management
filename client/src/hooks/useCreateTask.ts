@@ -15,7 +15,7 @@ type Task = {
 
 export const useCreateTask = (options?: MutateOptions<Task, unknown, Task, unknown>) => {
   return  useMutation({
-    mutationFn: (task: Task) => api.post<Task, Task>("/api/task", task),
+    mutationFn: (task: Task) => api.post<Task, Task>("/task", task),
     ...options,
   });
 };

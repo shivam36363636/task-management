@@ -42,14 +42,14 @@ export default function CreateTask() {
     useEffect(() => {
         if (taskData) {
             setFormData({
-                title: taskData?.data?.data?.title || "",
-                description: taskData?.data?.data?.description || "",
-                status: taskData?.data?.data?.status || "not_started",
-                assignedTo: taskData?.data?.data?.assignedTo || [],
-                tag: taskData?.data?.data?.tag || "",
-                priority: taskData?.data?.data?.priority || "",
-                team: taskData?.data?.data?.team || "",
-                dueDate: taskData?.data?.data?.dueDate || ""
+                title: (taskData as {data: {data: {title: string}}})?.data?.data?.title ?? "",
+                description: (taskData as {data: {data: {description: string}}})  ?.data?.data?.description ?? "",
+                status: (taskData as {data: {data: {status: string}}})?.data?.data?.status ?? "not_started",
+                assignedTo: (taskData as {data: {data: {assignedTo: string[]}}})?.data?.data?.assignedTo ?? [],
+                tag: (taskData as {data: {data: {tag: string}}})?.data?.data?.tag ?? "",
+                priority: (taskData as {data: {data: {priority: string}}})?.data?.data?.priority ?? "",
+                team: (taskData as {data: {data: {team: string}}})?.data?.data?.team ?? "",
+                dueDate: (taskData as {data: {data: {dueDate: string}}})?.data?.data?.dueDate ?? ""
             })
         }
 

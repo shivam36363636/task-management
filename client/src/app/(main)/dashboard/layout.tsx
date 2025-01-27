@@ -10,11 +10,11 @@ export default function layout({children}:{children:React.ReactNode}) {
 
   return (
     <AuthWrapper>
-      <main className='flex h-[100dvh] overflow-x-hidden w-[100dvw]'>
+      <main className='flex h-[100dvh] overflow-hidden w-[100dvw]'>
         <LeftSidebar />
         <div className='flex-1 flex flex-col'>
           <Navbar />
-          <div className='flex-1'>
+          <div id='main-content' className='flex-1 overflow-y-auto'>
             {children}
           </div>
           <TaskDetails />

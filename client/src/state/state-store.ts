@@ -19,10 +19,16 @@ type Store = {
 const useStore = create<Store>()((set) => ({
   isLeftSidebarOpen: false,
   isRightSidebarOpen: false,
-  setIsLeftSidebarOpen: (isOpen) => set({ isLeftSidebarOpen: isOpen }),
-  setIsRightSidebarOpen: (isOpen) => set({ isRightSidebarOpen: isOpen }),
-  toggleLeftSidebar: () => set((state) => ({ isLeftSidebarOpen: !state.isLeftSidebarOpen })),
-  toggleRightSidebar: () => set((state) => ({ isRightSidebarOpen: !state.isRightSidebarOpen })),
+  setIsLeftSidebarOpen: (isOpen) => set({ isLeftSidebarOpen: isOpen, isRightSidebarOpen: false }),
+  setIsRightSidebarOpen: (isOpen) => set({ isRightSidebarOpen: isOpen, isLeftSidebarOpen: false }),
+  toggleLeftSidebar: () => set((state) => ({ 
+    isLeftSidebarOpen: !state.isLeftSidebarOpen,
+    isRightSidebarOpen: false 
+  })),
+  toggleRightSidebar: () => set((state) => ({ 
+    isRightSidebarOpen: !state.isRightSidebarOpen,
+    isLeftSidebarOpen: false
+  })),
   isCreateTaskOpen: false,
   setIsCreateTaskOpen: (isOpen) => set({ isCreateTaskOpen: isOpen }),
   isTaskDetailsOpen: null,

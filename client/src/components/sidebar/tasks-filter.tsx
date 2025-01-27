@@ -24,7 +24,7 @@ export default function TasksFilter({ title, data }: TasksFilterProps) {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between text-sm font-medium cursor-pointer hover:bg-gray-100 p-2.5 rounded-lg transition-colors duration-200"
       >
-        <h2 className="text-gray-700 font-semibold">{title}</h2>
+        <h2 className="text-gray-700 font-semibold truncate">{title}</h2>
         <motion.div
           animate={{ rotate: isOpen ? 90 : 0 }}
           transition={{ duration: 0.2 }}
@@ -48,7 +48,7 @@ export default function TasksFilter({ title, data }: TasksFilterProps) {
                     htmlFor={item.key}
                     className="cursor-pointer hover:bg-gray-100 w-full rounded-lg p-2.5 truncate text-gray-600 transition-colors duration-200 hover:text-gray-900"
                   >
-                    {item.name}
+                    <span className="truncate">{item.name}</span>
                   </label>
                 </div>
               ))}

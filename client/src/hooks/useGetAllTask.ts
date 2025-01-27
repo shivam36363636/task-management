@@ -21,6 +21,6 @@ export type GetAllTaskResponse = {
 export const useGetAllTask = () => {
     return useQuery({
       queryKey: ["tasks"],
-      queryFn: () => api.get("/api/task"),
+      queryFn: () => api.get("/task"),
     });
 }

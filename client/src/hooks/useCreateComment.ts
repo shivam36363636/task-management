@@ -9,7 +9,7 @@ type CommentData = {
 const useCreateComment = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (data:CommentData) => api.post(`/api/comment`, data),
+        mutationFn: (data:CommentData) => api.post(`/comment`, data),
         onSuccess: (_, data) => {
             queryClient.invalidateQueries({ queryKey: ['comments', data.task] });
             toast.success('Comment created successfully');

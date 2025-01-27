@@ -4,7 +4,7 @@ import api from "@/utils/axiosInstance";
 const useGetComments = (taskId: string) => {
     return useQuery({
         queryKey: ["comments", taskId],
-        queryFn: () => api.get(`/api/comment/${taskId}`),
+        queryFn: () => api.get(`/comment/${taskId}`),
         enabled: !!taskId,
     });
 };

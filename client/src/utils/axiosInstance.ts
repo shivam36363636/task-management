@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
+  baseURL: process.env.NEXT_PUBLIC_BASE_API_URL || 'http://localhost:5000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -35,7 +35,7 @@ api.interceptors.response.use(
       try {
         const loginToken = localStorage.getItem('loginToken');
         const { refreshToken, ...rest } = JSON.parse(loginToken || '{}');
-        const response = await axios.post('/api/auth/refresh', { refreshToken });
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/refresh`, { refreshToken });
         
         const { accessToken, refreshToken: newRefreshToken } = response.data.data;
         
@@ -46,8 +46,8 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return api(originalRequest);
       } catch (error) {
-        localStorage.removeItem('loginToken');
-        window.location.href = '/auth/login';
+        // localStorage.removeItem('loginToken');
+        // window.location.href = '/auth/login';
         return Promise.reject(error);
       }
     }

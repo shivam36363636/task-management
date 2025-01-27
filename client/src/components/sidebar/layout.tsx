@@ -11,7 +11,7 @@ export function LeftSidebarLayout({ children }: { children: React.ReactNode }) {
             animate={{ minWidth: isLeftSidebarOpen ? "200px" : "0px" }}
             transition={{ duration: 0.3 }}
             layout
-            className="h-[100dvh] overflow-y-auto border-r border-gray-200 bg-gray-100"
+            className="h-[100dvh] overflow-y-auto border-r border-gray-200 relative bg-gray-100"
           >
             {isLeftSidebarOpen && children}
           </motion.aside>
