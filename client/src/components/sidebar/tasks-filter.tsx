@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {  ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type TeamData = {
