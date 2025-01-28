@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 type TeamData = {
   id: number;
@@ -12,11 +13,13 @@ type TeamData = {
 
 type TasksFilterProps = {
   title: string;
+  taskKey: string;
   data: TeamData[];
 }
 
-export default function TasksFilter({ title, data }: TasksFilterProps) {
+export default function TasksFilter({ title, taskKey, data }: TasksFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div className="mt-6 px-2">
@@ -43,7 +46,7 @@ export default function TasksFilter({ title, data }: TasksFilterProps) {
           >
             <div className="flex flex-col gap-1 mt-2 text-sm pl-2">
               {data.map((item) => (
-                <div key={item.id} className="flex items-center">
+                <div onClick={() => router.push(`/dashboard?filter=${item.key}&key=${taskKey}`)} key={item.id} className="flex items-center">
                   <label 
                     htmlFor={item.key}
                     className="cursor-pointer hover:bg-gray-100 w-full rounded-lg p-2.5 truncate text-gray-600 transition-colors duration-200 hover:text-gray-900"

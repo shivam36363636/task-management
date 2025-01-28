@@ -1,6 +1,5 @@
 "use client";
 
-import { useGetAllTask } from "@/hooks/useGetAllTask";
 import TaskBoxCard from "./task-box-card";
 
 const data = [
@@ -28,8 +27,7 @@ const data = [
 ];
 
 export default function TaskBoard() {
-  const { data: getAllTask } = useGetAllTask();
-  console.log(getAllTask);
+
   return (
     <div className="bg-white rounded-md flex-1 p-4 overflow-y-auto">
       <div className="flex gap-4 h-full">
