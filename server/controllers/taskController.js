@@ -20,7 +20,7 @@ exports.getTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
   try {
-    const task = await taskService.updateTask(req.params.id, req.body);
+    const task = await taskService.updateTask( req.body);
     res.status(200).json({ success: true, data: task });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -45,14 +45,7 @@ exports.getAllTasks = async (req, res) => {
   }
 };
 
-exports.assignTask = async (req, res) => {
-  try {
-    const task = await taskService.assignTask(req.params.id, req.body.userIds);
-    res.status(200).json({ success: true, data: task });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-};
+
 
 exports.getTasksByUser = async (req, res) => {
   try {
@@ -63,3 +56,11 @@ exports.getTasksByUser = async (req, res) => {
   }
 };
 
+exports.updateTaskStatus = async (req, res) => {
+  try {
+    const task = await taskService.updateTaskStatus(req.body);
+    res.status(200).json({ success: true, data: task });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};

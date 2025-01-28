@@ -14,6 +14,8 @@ type Store = {
   setIsCreateTaskOpen: (isOpen: boolean) => void;
   isTaskDetailsOpen: GetAllTaskResponse | null;
   setIsTaskDetailsOpen: (task: GetAllTaskResponse | null) => void;
+  isUpdateTaskOpen: GetAllTaskResponse | null;
+  setIsUpdateTaskOpen: (task: GetAllTaskResponse | null) => void;
 };
 
 const useStore = create<Store>()((set) => ({
@@ -32,7 +34,9 @@ const useStore = create<Store>()((set) => ({
   isCreateTaskOpen: false,
   setIsCreateTaskOpen: (isOpen) => set({ isCreateTaskOpen: isOpen }),
   isTaskDetailsOpen: null,
-  setIsTaskDetailsOpen: (task) => set({ isTaskDetailsOpen: task }),
+  setIsTaskDetailsOpen: (task) => set({ isTaskDetailsOpen: task }), 
+  isUpdateTaskOpen: null,
+  setIsUpdateTaskOpen: (task) => set({ isUpdateTaskOpen: task }),
 }));
 
 export default useStore;

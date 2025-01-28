@@ -11,76 +11,62 @@ import { useCreateTask } from "@/hooks/useCreateTask";
 import { toast } from "react-hot-toast";
 import useStore from "@/state/state-store";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import { useGetTaskById } from "@/hooks/useGetTaskById";
 import { X } from "lucide-react";
 import DateField from "../fields/date-field";
+import { useUpdateTask } from "@/hooks/useUpdateTask";
 
 export default function CreateTask() {
-    const { setIsCreateTaskOpen } = useStore()
+  const { setIsCreateTaskOpen, isUpdateTaskOpen } = useStore()
     const [formData, setFormData] = useState({
-        title: "",
-        description: "",
-        status: "not_started",
-        assignedTo: [] as string[],
-        tag: "",
-        priority: "",
-      team: "",
-        dueDate: ""
+        title: isUpdateTaskOpen?.title ?? "",
+        description: isUpdateTaskOpen?.description ?? "",
+        status: isUpdateTaskOpen?.status ?? "not_started",
+        assignedTo: isUpdateTaskOpen?.assignedTo ?? [] as string[],
+        tag: isUpdateTaskOpen?.tag ?? "",
+        priority: isUpdateTaskOpen?.priority ?? "",
+        team: isUpdateTaskOpen?.team ?? "",
+        dueDate: isUpdateTaskOpen?.dueDate ?? ""
     });
 
     const { data: users, isLoading: usersLoading } = useGetAllUsers();
     const { mutate: createTask, isPending } = useCreateTask();
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const { mutate: updateTask, isPending: updateTaskPending } = useUpdateTask();
 
-    const searchParams = useSearchParams();
-    const taskId = searchParams.get("taskId");
-
+    useEffect(()=>{
+      if(isUpdateTaskOpen){
+        setFormData(isUpdateTaskOpen);
+      }
+    },[isUpdateTaskOpen])
     
-    const { data: taskData ,isLoading: taskLoading } = useGetTaskById(taskId);
-    
-    useEffect(() => {
-        if (taskData) {
-            setFormData({
-                title: (taskData as {data: {data: {title: string}}})?.data?.data?.title ?? "",
-                description: (taskData as {data: {data: {description: string}}})  ?.data?.data?.description ?? "",
-                status: (taskData as {data: {data: {status: string}}})?.data?.data?.status ?? "not_started",
-                assignedTo: (taskData as {data: {data: {assignedTo: string[]}}})?.data?.data?.assignedTo ?? [],
-                tag: (taskData as {data: {data: {tag: string}}})?.data?.data?.tag ?? "",
-                priority: (taskData as {data: {data: {priority: string}}})?.data?.data?.priority ?? "",
-                team: (taskData as {data: {data: {team: string}}})?.data?.data?.team ?? "",
-                dueDate: (taskData as {data: {data: {dueDate: string}}})?.data?.data?.dueDate ?? ""
-            })
-        }
-
-        return () => {
-            setFormData({
-                title: "",
-                description: "",
-                status: "not_started",
-                assignedTo: [],
-                tag: "",
-                priority: "",
-                team: "",
-                dueDate: ""
-            })
-        }
-    }, [taskData]);
+   
 
 
-
-    if (usersLoading || taskLoading) return <div>Loading...</div>;
+    if (usersLoading) return <div>Loading...</div>;
 
     const multiSelectOptions = users?.data?.data?.map((user: { name: string, userId: string }) => ({ label: user?.name, value: user?.userId })) || [];
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        createTask({
-            ...formData,
-            userId: user?.userId
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      if (isUpdateTaskOpen) {
+        updateTask({
+          ...formData,
+          _id: isUpdateTaskOpen?._id,
         }, {
             onSuccess: () => {
-                setFormData({
+              setIsCreateTaskOpen(false);
+              queryClient.invalidateQueries({ queryKey: ["tasks"] });
+              toast.success("Task updated successfully");
+            }
+          });
+      } else {
+        
+        createTask({
+          ...formData,
+          userId: user?.userId
+        }, {
+            onSuccess: () => {
+              setFormData({
                     title: "",
                     description: "",
                     status: "not_started",
@@ -93,14 +79,15 @@ export default function CreateTask() {
                 setIsCreateTaskOpen(false);
                 queryClient.invalidateQueries({ queryKey: ["tasks"] });
                 toast.success("Task created successfully");
-            },
-            onError: () => {
+              },
+              onError: () => {
                 toast.error( "Something went wrong");
-            }
-        });
-
-    }
-
+              }
+            });
+            
+          }
+  }
+  
     
 
     return (
@@ -196,15 +183,15 @@ export default function CreateTask() {
           />
           <DateField
             label="Due Date"
-            value={formData.dueDate}
+            value={formData.dueDate ? new Date(formData.dueDate).toISOString().split('T')[0] : ''}
             onChange={(value) => setFormData({ ...formData, dueDate: value })}
           />
           <button
             className="bg-blue-500 text-white p-2 rounded-md"
             type="submit"
-            disabled={isPending}
+            disabled={isPending || updateTaskPending}
           >
-            {isPending ? "Creating..." : taskId ? "Update Task" : "Create Task"}
+            {isPending ? "Creating..." : updateTaskPending ? "Updating..." : isUpdateTaskOpen ? "Update Task" : "Create Task"}
           </button>
         </form>
       </CreateTaskLayout>

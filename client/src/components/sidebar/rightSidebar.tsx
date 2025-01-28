@@ -1,10 +1,11 @@
 "use client";
 
 import { RightSidebarLayout } from "./layout";
+import Profile from "./profile";
 export default function RightSidebar() {
   return (
     <RightSidebarLayout>
-      <h1 className="truncate">Right Sidebar</h1>
+      <Profile />
     </RightSidebarLayout>
   );
 }

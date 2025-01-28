@@ -20,8 +20,21 @@ exports.getTask = async (taskId) => {
   return task;
 };
 
-exports.updateTask = async (taskId, { title, description, status }) => {
-  const task = await Task.findByIdAndUpdate(taskId, { title, description, status }, { new: true });
+exports.updateTask = async ({ title, description, status, _id, assignedTo, tag, priority, team, dueDate }) => {
+  const task = await Task.findByIdAndUpdate(
+    _id,
+    {
+      title,
+      description,
+      status,
+      assignedTo,
+      tag,
+      priority,
+      team,
+      dueDate,
+    },
+    { new: true }
+  );
   return task;
 };
 
@@ -38,12 +51,11 @@ exports.getAllTasks = async () => {
   return await Task.find({});
 };
 
-exports.assignTask = async (taskId, userIds) => {
-  const task = await Task.findByIdAndUpdate(
-    taskId,
-    { assignedTo: userIds },
-    { new: true }
-  );
+
+exports.updateTaskStatus = async ({_id, status}) => {
+  const task = await Task.findByIdAndUpdate(_id, { status }, { new: true });
+  if (!task) {
+    throw new Error('Task not found');
+  }
   return task;
 };
-

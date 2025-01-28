@@ -2,10 +2,12 @@
 import useCreateComment from "@/hooks/useCreateComment";
 import useGetComments from "@/hooks/useGetComments";
 import useStore from "@/state/state-store";
-import { X } from "lucide-react";
+import { X, Trash2, Edit } from "lucide-react";
 import { useState } from "react";
 import CommentCard from "./comment-card";
 import AssignedUsers from "./assigned-users";
+import { useDeleteTask } from "@/hooks/useDeleteTask";
+import { useStatusUpdate } from "@/hooks/useStatusUpdate";
 
 const statusDataMap = {
   "not_started": {
@@ -58,10 +60,20 @@ const tagDataMap = {
 
 export const TaskDetails = () => {
   const { mutate: createComment } = useCreateComment();
-  const { isTaskDetailsOpen, setIsTaskDetailsOpen } = useStore();
+  const { isTaskDetailsOpen, setIsTaskDetailsOpen ,setIsUpdateTaskOpen,setIsCreateTaskOpen} = useStore();
   const { data: commentsData } = useGetComments(isTaskDetailsOpen?._id || "");
   const comments = commentsData?.data || [];
   const [comment, setComment] = useState("");
+  const { mutate: deleteTask } = useDeleteTask({
+    onSuccess: () => setIsTaskDetailsOpen(null)
+  });
+    const { mutate: updateStatus } = useStatusUpdate({
+      onSuccess: () => {
+        setIsTaskDetailsOpen(null);
+      }
+  });
+    
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const handleCreateComment = () => {
     createComment({
@@ -70,6 +82,13 @@ export const TaskDetails = () => {
       user: JSON.parse(localStorage.getItem("user") || "{}").userId || "",
     });
     setComment("");
+  };
+
+  const handleStatusChange = (newStatus: string) => {
+    updateStatus({
+      taskId: isTaskDetailsOpen?._id || "",
+      status: newStatus
+    });
   };
 
   if (!isTaskDetailsOpen) return null;
@@ -94,18 +113,42 @@ export const TaskDetails = () => {
             <div className="flex flex-col gap-4">
               <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
             </div>
-            <X
-              className="cursor-pointer hover:text-gray-600 w-6 h-6"
-              onClick={() => setIsTaskDetailsOpen(null)}
-            />
+            <div className="flex items-center gap-4">
+              {user?.userId === isTaskDetailsOpen?.createdBy && (
+                <>
+                  <Edit
+                    className="cursor-pointer hover:text-blue-600 w-6 h-6 text-blue-500"
+                    onClick={() => {
+                        setIsUpdateTaskOpen(isTaskDetailsOpen);
+                        setIsCreateTaskOpen(true);
+                        setIsTaskDetailsOpen(null);
+                    }}
+                  />
+                  <Trash2
+                    className="cursor-pointer hover:text-red-600 w-6 h-6 text-red-500"
+                    onClick={() => deleteTask(isTaskDetailsOpen._id)}
+                  />
+                </>
+              )}
+              <X
+                className="cursor-pointer hover:text-gray-600 w-6 h-6"
+                onClick={() => setIsTaskDetailsOpen(null)}
+              />
+            </div>
           </div>
           <div className="p-6 space-y-6 flex-1 overflow-y-auto">
             <div>
               <h2 className="text-lg font-semibold mb-3 text-gray-800">Status & Priority</h2>
               <div className="flex items-center gap-3">
-                <span className={`${statusDataMap[status as keyof typeof statusDataMap].color} rounded-full text-sm font-medium py-1 px-4 text-white`}>
-                  {statusDataMap[status as keyof typeof statusDataMap].text}
-                </span>
+                <select 
+                  value={status}
+                  onChange={(e) => handleStatusChange(e.target.value)}
+                  className="bg-transparent border rounded-full text-sm font-medium py-1 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {Object.entries(statusDataMap).map(([key, value]) => (
+                    <option key={key} value={key}>{value.text}</option>
+                  ))}
+                </select>
                 <span className={`${priorityDataMap[priority as keyof typeof priorityDataMap].color} rounded-full px-4 py-1 text-sm font-medium`}>
                   {priorityDataMap[priority as keyof typeof priorityDataMap].text}
                 </span>
