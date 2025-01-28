@@ -28,15 +28,20 @@ The API is hosted at: `https://task-management-backend-wxz7.onrender.com/api`
 - POST `/auth/register` - User registration
 
 ### User Endpoints
-- GET `/users/profile` - Get user profile
-- PUT `/users/profile` - Update user profile
+- GET `/profile/get` - Get user profile
+- POST `/profile/create` - Create user profile
+- PUT `/profile/update` - Update user profile
 
 ### Task Endpoints
-- GET `/tasks` - Get all tasks
-- POST `/tasks` - Create new task
-- GET `/tasks/:id` - Get specific task
-- PUT `/tasks/:id` - Update task
-- DELETE `/tasks/:id` - Delete task
+- GET `/task` - Get all tasks
+- POST `/task` - Create new task
+- GET `/task/:id` - Get specific task
+- PUT `/task/:id` - Update task
+- DELETE `/task/:id` - Delete task
+- 
+### Comment Endpoints
+- POST `/comment` - Create new comment
+- GET `/comment/:taskId` - Get comments by task id
 
 ## Environment Setup
 
