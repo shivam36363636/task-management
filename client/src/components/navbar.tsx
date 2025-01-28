@@ -7,8 +7,10 @@ import LogoComponent from "./logo-component";
 export default function Navbar() {
     const {toggleLeftSidebar, toggleRightSidebar, isLeftSidebarOpen} = useStore();
     const logout = () => {
-        localStorage.removeItem("loginToken");
-        localStorage.removeItem("user");
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem("loginToken");
+            localStorage.removeItem("user");
+        }
         window.location.href = "/auth/login";
     }
     return (

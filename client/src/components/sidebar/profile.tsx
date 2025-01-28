@@ -35,7 +35,7 @@ const Profile: FC = () => {
     const profile: ProfileData = profileData?.data?.data;
     
     if(isEdit){
-        return <ProfileForm isProfile={profile === null} profile={{...profile,user:JSON.parse(localStorage.getItem("user") || "{}")?.userId}} afterSubmit={()=>setIsEdit(false)} />
+        return <ProfileForm isProfile={profile === null} profile={{...profile,user:typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("user") || "{}")?.userId : null}} afterSubmit={()=>setIsEdit(false)} />
     }
 
   return (
